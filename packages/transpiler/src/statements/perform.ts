@@ -103,7 +103,7 @@ export class PerformTranspiler implements IStatementTranspiler {
         index++;
       }
 
-      return PerformTranspiler.onCommit(node, traversal, "await " + formName.concatTokens().toLowerCase() + `({${params.join(",")}});`);
+      return PerformTranspiler.onCommit(node, traversal, "await " + Traversal.formName(formName.concatTokens()) + `({${params.join(",")}});`);
     }
   }
 

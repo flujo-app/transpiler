@@ -194,7 +194,7 @@ export class HandleABAP {
     for (const c of node?.findAllStatements(abaplint.Statements.Form) || []) {
       const e = c.findFirstExpression(abaplint.Expressions.FormName)?.getFirstToken().getStr();
       if (e) {
-        res.push(e.toLowerCase());
+        res.push(Traversal.formName(e));
       }
     }
     return res;

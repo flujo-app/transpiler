@@ -31,7 +31,7 @@ export class FormTranspiler implements IStructureTranspiler {
 
     if (formName && traversal.getCurrentObject().getType() === "PROG") {
       ret.appendString(`abap.Forms['PROG-${traversal.getCurrentObject().getName().toUpperCase()
-        }-${formName}'] = ${formName?.toLowerCase()};`);
+        }-${formName}'] = ${Traversal.formName(formName)};`);
     }
 
     return ret;

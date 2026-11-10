@@ -154,6 +154,12 @@ export class Traversal {
     return name?.replace(/\//g, "$");
   }
 
+  /** the javascript function name of a FORM. FORMs have a namespace of their own in ABAP: a FORM may have the name of
+   * a data object or a type of the program, so the function name gets a prefix no ABAP name can produce */
+  public static formName(name: string): string {
+    return "form$" + Traversal.escapeNamespace(name.toLowerCase())!.replace(/-/g, "$");
+  }
+
   /** the self reference "me", it is a FieldChain in eg. MethodCallChain and a SourceField in eg. MethodSource */
   public static isMe(node: abaplint.Nodes.ExpressionNode
     | abaplint.Nodes.TokenNode
@@ -1114,7 +1120,7 @@ this.INTERNAL_ID = abap.internalIdCounter++;\n`;
     let context: abaplint.AbstractType | undefined = undefined;
     for (const c of found.getChildren()) {
       if (context === undefined) {
-        context = scope.findVariable(c.getFirstToken().getStr())?.getType();
+        context = scope.findVariable(c.getFirstToken().getStr().replace(/^!/, ""))?.getType();
       } else if (c.get() instanceof abaplint.Expressions.ComponentName
           && context instanceof abaplint.BasicTypes.StructureType) {
         context = context.getComponentByName(c.getFirstToken().getStr());
