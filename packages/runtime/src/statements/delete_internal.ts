@@ -56,9 +56,12 @@ export async function deleteInternal(target: Table | HashedTable | FieldSymbol, 
     }
     const from = options.from?.get() ?? 1;
     const to = Math.min(options.to.get(), target.array().length);
+    let removed = 0;
     for (let i = to; i >= from; i--) {
       target.deleteIndex(i - 1);
+      removed++;
     }
+    abap.builtin.sy.get().subrc.set(removed > 0 ? 0 : 4);
     return;
   }
 
@@ -68,6 +71,7 @@ export async function deleteInternal(target: Table | HashedTable | FieldSymbol, 
     }
 
     const array = target.array();
+    const before = array.length;
 
     for (let index = array.length - 1; index > 0; index--) {
 
@@ -98,6 +102,7 @@ export async function deleteInternal(target: Table | HashedTable | FieldSymbol, 
         }
       }
     }
+    abap.builtin.sy.get().subrc.set(target.array().length < before ? 0 : 4);
     return;
   }
 
@@ -156,10 +161,11 @@ export async function deleteInternal(target: Table | HashedTable | FieldSymbol, 
       target.deleteIndex(index);
     } else if (options?.from && options.from.get() <= index + 1) {
       target.deleteIndex(index);
+      deleted++;
     }
   }
 
-  if (options?.where) {
+  if (options?.where || options?.from) {
     abap.builtin.sy.get().subrc.set(deleted > 0 ? 0 : 4);
   }
 }
