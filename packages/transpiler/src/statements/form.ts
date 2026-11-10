@@ -14,7 +14,7 @@ export class FormTranspiler implements IStatementTranspiler {
     const scope = traversal.findCurrentScopeByToken(node.getFirstToken());
     const def = scope?.findFormDefinition(name);
 
-    const ret = new Chunk("async function " + name + "(INPUT) {");
+    const ret = new Chunk("async function " + name.toLowerCase() + "(INPUT) {");
     const params: string[] = [];
     for (const p of def?.getChangingParameters() || []) {
       params.push(`let ${Traversal.prefixVariable(p.getName())} = INPUT.${p.getName()};`);
