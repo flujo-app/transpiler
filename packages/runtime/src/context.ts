@@ -23,6 +23,9 @@ export class Context {
   public userParameters: Map<string, string> = new Map();
   // NEW-LINE ran: the next list output starts a new line, unless a new line was just started
   public newLinePending = false;
+  // data clusters of EXPORT and IMPORT (ABAP memory, database and shared buffer clusters, DATA BUFFER), by key
+  public clusters: Map<string, Map<string, any>> = new Map();
+  public clusterBuffers = 0;
 
   // CALL FUNCTION IN UPDATE TASK hands the copied parameters to the host, if one is set
   public updateTask: {register(name: string, param: {exporting?: any, tables?: any}): Promise<void> | void} | undefined = undefined;
