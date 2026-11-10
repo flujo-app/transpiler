@@ -173,11 +173,14 @@ export class Validation {
     }
     const statement = obj.getABAPFileByName(issue.getFilename())?.getStatements()
       .find(s => s.getStart().equals(issue.getStart()));
-    if (!(statement?.get() instanceof Statements.DeleteInternal)) {
+    // MODIFY itab [FROM wa] reads like MODIFY dbtab too: the same holds when itab is a variable of table type (the
+    // translation of the statement itself is in the runner's patches modify-itab-database and modify-itab-current)
+    const modify = statement !== undefined && /^MODIFY\s/i.test(statement.concatTokens());
+    if (statement === undefined || (!(statement.get() instanceof Statements.DeleteInternal) && !modify)) {
       return false;
     }
     const token = statement.getTokens()[1];
-    if (token === undefined) {
+    if (token === undefined || token.getStr().toUpperCase() === "TABLE") {
       return false;
     }
     let spaghetti = scopes.get(obj);
