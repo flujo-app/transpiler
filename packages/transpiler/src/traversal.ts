@@ -6,6 +6,7 @@ import {IStatementTranspiler} from "./statements/_statement_transpiler";
 import {IExpressionTranspiler} from "./expressions/_expression_transpiler";
 import {IStructureTranspiler} from "./structures/_structure_transpiler";
 import {Chunk} from "./chunk";
+import {InlineDeclarations} from "./inline";
 import {ConstantTranspiler} from "./expressions";
 import {ITranspilerOptions, UnknownTypesEnum} from "./types";
 import {DEFAULT_KEYWORDS} from "./keywords";
@@ -82,6 +83,9 @@ export class Traversal {
   public readonly typeFactories: TypeFactoryRegistry | undefined;
   /** the LOOPs being transpiled, innermost last; SUM reads its work area, rows and control key here */
   public readonly controlLevels: ControlLevel[] = [];
+  /** inline declarations (DATA( ), FIELD-SYMBOL( )) already written, each is declared once */
+  public readonly inlineDeclared: Set<abaplint.TypedIdentifier> = new Set();
+  private programInlineDone = false;
 
   public constructor(spaghetti: abaplint.ISpaghettiScope, file: abaplint.ABAPFile,
                      obj: abaplint.ABAPObject, reg: abaplint.IRegistry, options?: ITranspilerOptions,
@@ -1361,6 +1365,11 @@ this.INTERNAL_ID = abap.internalIdCounter++;\n`;
 
     const list: any = StructureTranspilers;
     const ret = new Chunk();
+    if (node.get() instanceof abaplint.Structures.Any && this.programInlineDone === false) {
+      // inline declarations in event blocks and other code outside procedures are global data of the program
+      this.programInlineDone = true;
+      ret.appendString(InlineDeclarations.buildProgramDeclarations(node, this));
+    }
 
     const search = node.get().constructor.name + "Transpiler";
     if (list[search]) {
