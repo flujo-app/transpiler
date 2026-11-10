@@ -63,6 +63,7 @@ import {ISkipOptions, SkipStatement} from "./skip";
 import {ABAP} from "..";
 
 declare const abap: ABAP;
+import {eq} from "../compare";
 
 // this is a class, as statements like SELECT needs access to the database object instance
 // and WRITE will access the Console
@@ -152,6 +153,24 @@ export class Statements {
   /** SET UPDATE TASK LOCAL */
   public setUpdateTaskLocal() {
     abap.builtin.sy.get().subrc.set(this.context.luw.setLocal());
+  }
+
+  /** ON CHANGE OF: true when a field differs from what this statement saw the last time it ran (the first time: from
+   *  its initial value), and then remembers the fields */
+  public onChange(key: string, fields: any[]): boolean {
+    const values = fields.map(f => (f instanceof FieldSymbol ? f.getPointer() : f));
+    const last = this.context.onChange.get(key) ?? values.map(v => {
+      const initial = v.clone();
+      initial.clear();
+      return initial;
+    });
+    const changed = values.some((v, i) => eq(v, last[i]) === false);
+    if (changed) {
+      this.context.onChange.set(key, values.map(v => v.clone()));
+    } else if (!this.context.onChange.has(key)) {
+      this.context.onChange.set(key, last);
+    }
+    return changed;
   }
 
   public async wait(options: IWaitOptions) {

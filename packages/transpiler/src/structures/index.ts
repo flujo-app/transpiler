@@ -12,6 +12,7 @@ export * from "./do";
 export * from "./function_module";
 export * from "./interface";
 export * from "./loop";
+export * from "./on_change";
 export * from "./module";
 export * from "./select";
 export * from "./method";
