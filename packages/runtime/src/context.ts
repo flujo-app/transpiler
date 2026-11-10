@@ -19,6 +19,8 @@ export class Context {
   public luw: LUW = new LUW();
   // ON CHANGE OF: the values each statement saw the last time it ran, by statement
   public onChange: Map<string, any[]> = new Map();
+  // the user memory (SET PARAMETER / GET PARAMETER) by parameter ID, upper and lower case kept apart
+  public userParameters: Map<string, string> = new Map();
 
   // CALL FUNCTION IN UPDATE TASK hands the copied parameters to the host, if one is set
   public updateTask: {register(name: string, param: {exporting?: any, tables?: any}): Promise<void> | void} | undefined = undefined;
