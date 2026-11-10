@@ -2,6 +2,7 @@ import {Console} from "./console/console";
 import {DatabaseClient, DatabaseCursorCallbacks} from "./db/db";
 import * as RFC from "./rfc";
 import {DatasetHost, OpenDataset} from "./dataset/dataset";
+import {LUW} from "./statements/luw";
 
 export class Context {
   public console: Console;
@@ -13,6 +14,9 @@ export class Context {
   public databaseConnections: {[name: string]: DatabaseClient} = {};
 
   public RFCDestinations: {[name: string]: RFC.RFCClient} = {};
+
+  // the SAP LUW: what COMMIT WORK runs and ROLLBACK WORK forgets, see statements/luw.ts
+  public luw: LUW = new LUW();
 
   // CALL FUNCTION IN UPDATE TASK hands the copied parameters to the host, if one is set
   public updateTask: {register(name: string, param: {exporting?: any, tables?: any}): Promise<void> | void} | undefined = undefined;
