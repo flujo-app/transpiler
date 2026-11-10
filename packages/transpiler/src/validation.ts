@@ -188,8 +188,12 @@ export class Validation {
       spaghetti = new SyntaxLogic(reg, obj).run().spaghetti;
       scopes.set(obj, spaghetti);
     }
-    const type = spaghetti.lookupPosition(token.getStart(), issue.getFilename())?.findVariable(token.getStr())?.getType();
-    return type instanceof BasicTypes.TableType;
+    const variable = spaghetti.lookupPosition(token.getStart(), issue.getFilename())?.findVariable(token.getStr());
+    if (variable?.getType() instanceof BasicTypes.TableType) {
+      return true;
+    }
+    // no internal table: the name is the database table, written from FROM or from its TABLES work area
+    return variable !== undefined || statement.findExpressionAfterToken("FROM") !== undefined;
   }
 
 
