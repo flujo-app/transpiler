@@ -1068,4 +1068,15 @@ ENDCLASS.`;
 
     expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("Native SQL, not supported, transpiler");`);
   });
+
+  it("VALUE FOR GROUPS, runtime error", async () => {
+    const abap = `
+    TYPES: BEGIN OF ty, id TYPE i, END OF ty.
+    TYPES tt TYPE STANDARD TABLE OF ty WITH EMPTY KEY.
+    DATA it TYPE tt.
+    DATA rt TYPE tt.
+    rt = VALUE #( FOR GROUPS g OF e IN it GROUP BY e-id ( id = g ) ).`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("VALUE FOR GROUPS, not supported, transpiler")`);
+  });
 });

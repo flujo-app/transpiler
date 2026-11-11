@@ -16,6 +16,11 @@ export class ValueBodyTranspiler {
       throw new Error("ValueBodyTranspiler, Expected TypeNameOrInfer");
     }
 
+    // FOR GROUPS has no transpiler in this version (upstream transpiles it since 2.14.17): the VALUE fails when it runs
+    if (body.findDirectExpressions(Expressions.For).some(f => f.findDirectTokenByText("GROUPS") !== undefined)) {
+      return new Chunk(`(function() { throw new Error(${JSON.stringify("VALUE FOR GROUPS, not supported, transpiler")}) })()`);
+    }
+
     let ret = new Chunk().appendString(new TypeNameOrInfer().transpile(typ, traversal).getCode());
     const context = new TypeNameOrInfer().findType(typ, traversal);
     if (context instanceof BasicTypes.VoidType || context instanceof BasicTypes.UnknownType) {
