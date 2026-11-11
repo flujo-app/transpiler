@@ -732,7 +732,7 @@ ENDFORM.`;
 
     const expected = `async function form$foo(INPUT) {
   let sdf = (() => { throw new Error("Void type: ZCL_UNKNOWN") })();
-  sdf.set(function() { throw new Error("Void type: ZCL_UNKNOWN") })();
+  sdf.set((function() { throw new Error("Void type: ZCL_UNKNOWN") })());
 }
 abap.Forms['PROG-ZFOOBAR-FOO'] = form$foo;`;
     expect(await runSingle(abap, {
