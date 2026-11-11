@@ -962,4 +962,13 @@ WRITE 'sdf'.`;
     expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("LOOP over extract, not supported, transpiler");`);
   });
 
+  it("CHAIN, runtime error", async () => {
+    const abap = `
+    CHAIN.
+      FIELD foo MODULE check_foo.
+    ENDCHAIN.`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("CHAIN, not supported, transpiler");`);
+  });
+
 });
