@@ -191,4 +191,12 @@ ENDFUNCTION.`,
     expect(assignment, js).to.be.greaterThan(declaration);
   });
 
+  it("an include that is not there does not stop the function group", async () => {
+    const input = files.map(file => file.filename === "zfgroup.fugr.saplzfgroup.abap"
+      ? {...file, contents: "INCLUDE lzfgrouptop.\nINCLUDE lzfgroupf99.\nINCLUDE lzfgroupuxx."}
+      : file);
+    const fugr = await runFugr(input, {ignoreSyntaxCheck: true});
+    expect(fugr.chunk.getCode()).to.include("INCLUDE lzfgroupf99");
+  });
+
 });
