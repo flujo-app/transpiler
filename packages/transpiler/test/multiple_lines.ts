@@ -1079,4 +1079,11 @@ ENDCLASS.`;
 
     expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("VALUE FOR GROUPS, not supported, transpiler")`);
   });
+  it("VALUE # whose type cannot be inferred, runtime error with unknownTypes", async () => {
+    const abap = `
+    INSERT demo_expressions FROM @( VALUE #( id = 'F' ) ).`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true, skipVersionCheck: true, unknownTypes: UnknownTypesEnum.runtimeError})).to.include(`throw new Error("Unknown type: TypeNameOrInfer, type not found: #`);
+  });
+
 });
