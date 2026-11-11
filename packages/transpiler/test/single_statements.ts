@@ -437,6 +437,15 @@ await abap.Classes['KERNEL_AUTHORITY_CHECK'].call({object: obj,user: usr,fields:
       js: `await abap.statements.select(res, {select: "SELECT count( * )  from " + abap.buildDbTableName("tab") + " WHERE \\"enable_sqlite\\" = '" + abap.builtin.abap_true.get() + "'"});`, skip: false},
     {abap: "select count( * ) from tab into res where ('enable_sqlite = abap_true').",
       js: `await abap.statements.select(res, {select: "SELECT count( * )  from " + abap.buildDbTableName("tab") + " WHERE \\"enable_sqlite\\" = 'X'"});`, skip: false},
+    {abap: "FIELD-GROUPS header.", js: `throw new Error("FIELD-GROUPS, not supported, transpiler");`, skip: false},
+    {abap: "INSERT foo bar INTO header.", js: `throw new Error("INSERT INTO field group, not supported, transpiler");`, skip: false},
+    {abap: "EXTRACT header.", js: `throw new Error("EXTRACT, not supported, transpiler");`, skip: false},
+    {abap: "NODES spfli.", js: `throw new Error("NODES, not supported, transpiler");`, skip: false},
+    {abap: "GET spfli LATE.", js: `throw new Error("GET, not supported, transpiler");`, skip: false},
+    {abap: "PUT spfli.", js: `throw new Error("PUT, not supported, transpiler");`, skip: false},
+    {abap: "REJECT 'SPFLI'.", js: `throw new Error("REJECT, not supported, transpiler");`, skip: false},
+    {abap: "CHECK SELECT-OPTIONS.", js: `throw new Error("CHECK SELECT-OPTIONS, not supported, transpiler");`, skip: false},
+    {abap: "INFOTYPES 0001.", js: `throw new Error("INFOTYPES, not supported, transpiler");`, skip: false},
   ];
 
   for (const test of tests) {

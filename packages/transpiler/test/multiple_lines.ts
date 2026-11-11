@@ -943,4 +943,23 @@ WRITE 'sdf'.`;
     expect(depth).to.equal(0);
   });
 
+  it("PROVIDE, runtime error", async () => {
+    const abap = `
+    PROVIDE FIELDS * FROM lt_tab INTO ls_tab VALID lv_flag BOUNDS begda AND endda
+      BETWEEN lv_begda AND lv_endda.
+      WRITE ls_tab-begda.
+    ENDPROVIDE.`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("PROVIDE, not supported, transpiler");`);
+  });
+
+  it("LOOP over an extract dataset, runtime error", async () => {
+    const abap = `
+    LOOP.
+      WRITE 'a'.
+    ENDLOOP.`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("LOOP over extract, not supported, transpiler");`);
+  });
+
 });
