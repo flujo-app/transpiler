@@ -276,6 +276,13 @@ export class Traversal {
       return this.fuctionGroupWorkaround();
     }
 
+    if (node === undefined
+        && this.obj instanceof abaplint.Objects.Class
+        && this.obj.getABAPFiles().some(f => f.getFilename() === filename)) {
+      // the local types, constants and data of a class pool, outside its local classes, are in its global scope
+      return this.spaghetti.getFirstChild();
+    }
+
     return node;
   }
 
