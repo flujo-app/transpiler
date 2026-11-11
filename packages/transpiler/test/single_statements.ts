@@ -477,6 +477,7 @@ await abap.Classes['KERNEL_AUTHORITY_CHECK'].call({object: obj,user: usr,fields:
     {abap: "CALL BADI lo_badi->run EXPORTING iv_foo = lv_foo.", js: `throw new Error("CALL BADI, not supported, transpiler");`, skip: false},
     {abap: "RAISE ENTITY EVENT zi_foo~created FROM lt_events.", js: `throw new Error("RAISE ENTITY EVENT, not supported, transpiler");`, skip: false},
     {abap: "GET PERMISSIONS ONLY GLOBAL ENTITY zi_foo REQUEST ls_request RESULT ls_result FAILED ls_failed REPORTED ls_reported.", js: `throw new Error("GET PERMISSIONS, not supported, transpiler");`, skip: false},
+    {abap: "CALL DATABASE PROCEDURE ('ZPROC') EXPORTING iv_foo = lv_foo IMPORTING ev_bar = lv_bar.", js: `throw new Error("CALL DATABASE PROCEDURE, not supported, transpiler");`, skip: false},
   ];
 
   for (const test of tests) {
