@@ -473,6 +473,10 @@ await abap.Classes['KERNEL_AUTHORITY_CHECK'].call({object: obj,user: usr,fields:
     {abap: "EXPORT DYNPRO ls_h lt_f lt_e lt_m ID lv_id.", js: `throw new Error("EXPORT DYNPRO, not supported, transpiler");`, skip: false},
     {abap: "DELETE DYNPRO lv_id.", js: `throw new Error("DELETE DYNPRO, not supported, transpiler");`, skip: false},
     {abap: "IMPORT NAMETAB ls_header lt_fields ID lv_name.", js: `throw new Error("IMPORT NAMETAB, not supported, transpiler");`, skip: false},
+    {abap: "GET BADI lo_badi.", js: `throw new Error("GET BADI, not supported, transpiler");`, skip: false},
+    {abap: "CALL BADI lo_badi->run EXPORTING iv_foo = lv_foo.", js: `throw new Error("CALL BADI, not supported, transpiler");`, skip: false},
+    {abap: "RAISE ENTITY EVENT zi_foo~created FROM lt_events.", js: `throw new Error("RAISE ENTITY EVENT, not supported, transpiler");`, skip: false},
+    {abap: "GET PERMISSIONS ONLY GLOBAL ENTITY zi_foo REQUEST ls_request RESULT ls_result FAILED ls_failed REPORTED ls_reported.", js: `throw new Error("GET PERMISSIONS, not supported, transpiler");`, skip: false},
   ];
 
   for (const test of tests) {
