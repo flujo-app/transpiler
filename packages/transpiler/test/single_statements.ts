@@ -493,8 +493,12 @@ await abap.Classes['KERNEL_AUTHORITY_CHECK'].call({object: obj,user: usr,fields:
     {abap: "GET BADI lo_badi.", js: `throw new Error("GET BADI, not supported, transpiler");`, skip: false},
     {abap: "CALL BADI lo_badi->run EXPORTING iv_foo = lv_foo.", js: `throw new Error("CALL BADI, not supported, transpiler");`, skip: false},
     {abap: "RAISE ENTITY EVENT zi_foo~created FROM lt_events.", js: `throw new Error("RAISE ENTITY EVENT, not supported, transpiler");`, skip: false},
-    {abap: "GET PERMISSIONS ONLY GLOBAL ENTITY zi_foo REQUEST ls_request RESULT ls_result FAILED ls_failed REPORTED ls_reported.", js: `throw new Error("GET PERMISSIONS, not supported, transpiler");`, skip: false},
     {abap: "CALL DATABASE PROCEDURE ('ZPROC') EXPORTING iv_foo = lv_foo IMPORTING ev_bar = lv_bar.", js: `throw new Error("CALL DATABASE PROCEDURE, not supported, transpiler");`, skip: false},
+    {abap: "DELETE FROM DATABASE indx(zz) ID 'FOO'.", js: `throw new Error("DELETE CLUSTER, not supported, transpiler");`, skip: false},
+    {abap: "COMMIT ENTITIES.", js: `throw new Error("COMMIT ENTITIES, not supported, transpiler");`, skip: false},
+    {abap: "ROLLBACK ENTITIES.", js: `throw new Error("ROLLBACK ENTITIES, not supported, transpiler");`, skip: false},
+    {abap: "IMPORT foo = bar FROM INTERNAL TABLE itab.", js: `throw new Error("IMPORT, not supported, transpiler: INTERNAL TABLE itab .");`, skip: false},
+    {abap: "EXPORT foo = bar TO INTERNAL TABLE itab.", js: `throw new Error("EXPORT, not supported, transpiler: INTERNAL TABLE itab .");`, skip: false},
   ];
 
   for (const test of tests) {

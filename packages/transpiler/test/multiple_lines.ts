@@ -718,7 +718,7 @@ ENDFORM.`;
 
     const expected = `async function form$foo(INPUT) {
   let sdf = (() => { throw new Error("Void type: ZCL_UNKNOWN") })();
-  sdf.set(function() { throw new Error("Void type: ZCL_UNKNOWN") })();
+  sdf.set((function() { throw new Error("Void type: ZCL_UNKNOWN") })());
 }
 abap.Forms['PROG-ZFOOBAR-FOO'] = form$foo;`;
     expect(await runSingle(abap, {
@@ -1043,4 +1043,29 @@ WRITE 'sdf'.`;
     expect(await runSingle(abap, {ignoreSyntaxCheck: true, unknownTypes: UnknownTypesEnum.runtimeError})).to.include(`throw new Error("Void type: `);
   });
 
+
+  it("EXEC SQL, runtime error", async () => {
+    const abap = `
+    EXEC SQL.
+      SELECT * FROM foo
+    ENDEXEC.`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("EXEC SQL, not supported, transpiler");`);
+  });
+
+  it("AMDP method with native SQL, runtime error", async () => {
+    const abap = `
+CLASS lcl DEFINITION.
+  PUBLIC SECTION.
+    METHODS foo.
+ENDCLASS.
+
+CLASS lcl IMPLEMENTATION.
+  METHOD foo BY DATABASE PROCEDURE FOR HDB LANGUAGE SQLSCRIPT.
+    SELECT * FROM dummy;
+  ENDMETHOD.
+ENDCLASS.`;
+
+    expect(await runSingle(abap, {ignoreSyntaxCheck: true})).to.include(`throw new Error("Native SQL, not supported, transpiler");`);
+  });
 });
