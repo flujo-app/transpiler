@@ -461,6 +461,13 @@ await abap.Classes['KERNEL_AUTHORITY_CHECK'].call({object: obj,user: usr,fields:
     {abap: "REJECT 'SPFLI'.", js: `throw new Error("REJECT, not supported, transpiler");`, skip: false},
     {abap: "CHECK SELECT-OPTIONS.", js: `throw new Error("CHECK SELECT-OPTIONS, not supported, transpiler");`, skip: false},
     {abap: "INFOTYPES 0001.", js: `throw new Error("INFOTYPES, not supported, transpiler");`, skip: false},
+    {abap: "GENERATE REPORT lv_name.", js: `throw new Error("GENERATE REPORT, not supported, transpiler");`, skip: false},
+    {abap: "LOAD REPORT lv_name PART 'HEAD' INTO lt_head.", js: `throw new Error("LOAD REPORT, not supported, transpiler");`, skip: false},
+    {abap: "GENERATE DYNPRO ls_h lt_f lt_e lt_m ID lv_id MESSAGE lv_mess LINE lv_line WORD lv_word.", js: `throw new Error("GENERATE DYNPRO, not supported, transpiler");`, skip: false},
+    {abap: "IMPORT DYNPRO ls_h lt_f lt_e lt_m ID lv_id.", js: `throw new Error("IMPORT DYNPRO, not supported, transpiler");`, skip: false},
+    {abap: "EXPORT DYNPRO ls_h lt_f lt_e lt_m ID lv_id.", js: `throw new Error("EXPORT DYNPRO, not supported, transpiler");`, skip: false},
+    {abap: "DELETE DYNPRO lv_id.", js: `throw new Error("DELETE DYNPRO, not supported, transpiler");`, skip: false},
+    {abap: "IMPORT NAMETAB ls_header lt_fields ID lv_name.", js: `throw new Error("IMPORT NAMETAB, not supported, transpiler");`, skip: false},
   ];
 
   for (const test of tests) {
