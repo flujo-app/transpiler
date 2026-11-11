@@ -23,6 +23,9 @@ export class Context {
   public onChange: Map<string, any[]> = new Map();
   // the user memory (SET PARAMETER / GET PARAMETER) by parameter ID, upper and lower case kept apart
   public userParameters: Map<string, string> = new Map();
+  // data clusters of EXPORT and IMPORT (ABAP memory, database and shared buffer clusters, DATA BUFFER), by key
+  public clusters: Map<string, Map<string, any>> = new Map();
+  public clusterBuffers = 0;
 
   // CALL FUNCTION IN UPDATE TASK hands the copied parameters to the host, if one is set
   public updateTask: {register(name: string, param: {exporting?: any, tables?: any}): Promise<void> | void} | undefined = undefined;
