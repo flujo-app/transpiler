@@ -26,4 +26,5 @@ export * from "./type_enum";
 export * from "./types";
 export * from "./when";
 export * from "./while";
+export * from "./with";
 export * from "./form";
