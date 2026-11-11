@@ -199,4 +199,13 @@ ENDFUNCTION.`,
     expect(fugr.chunk.getCode()).to.include("INCLUDE lzfgroupf99");
   });
 
+  it("a VALUE of the TOP include names a constant", async () => {
+    const input = files.map(file => file.filename === "zfgroup.fugr.lzfgrouptop.abap"
+      ? {...file, contents: "FUNCTION-POOL zfgroup.\nCONSTANTS c_max TYPE i VALUE 3.\nDATA gv_flag TYPE abap_bool VALUE abap_true.\nDATA gv_max TYPE i VALUE c_max."}
+      : file);
+    const js = (await runFugr(input)).chunk.getCode();
+    expect(js).to.include("gv_flag.set(abap.builtin.abap_true);");
+    expect(js).to.include("gv_max.set(c_max);");
+  });
+
 });
