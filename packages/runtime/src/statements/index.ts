@@ -62,6 +62,7 @@ import {SelectDatabaseOptions, SelectRuntimeOptions} from "../db/db";
 import {Trace} from "../trace";
 import {ISkipOptions, SkipStatement} from "./skip";
 import {eq} from "../compare";
+import {ReportEvents} from "../report_events";
 import {ABAP} from "..";
 
 declare const abap: ABAP;
@@ -278,6 +279,20 @@ export class Statements {
 
   public skip(options?: ISkipOptions) {
     return new SkipStatement(this.context).skip(options);
+  }
+
+  /** the event blocks of a report, see report_events.ts */
+  public reportEvents() {
+    return new ReportEvents(this.context);
+  }
+
+  /** before an output to the list: the report's TOP-OF-PAGE, the first time */
+  public async topOfPage() {
+    const block = this.context.topOfPage;
+    if (block !== undefined) {
+      this.context.topOfPage = undefined;
+      await block();
+    }
   }
 
 }
